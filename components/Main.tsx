@@ -20,7 +20,7 @@ const Main: FunctionComponent = () => {
                 gap="16px"
             >
                 <h1>Designed With next.JS</h1>
-                <h4>Gets your system default and saves you theme choice in localStorage</h4>
+                <h4>Gets your system default and saves your theme choice in the cookie storage</h4>
             </Container>
         </>
     )
