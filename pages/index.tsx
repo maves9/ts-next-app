@@ -1,22 +1,28 @@
-import type { NextPage } from 'next'
 import { useState, useEffect } from 'react'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import Head from 'next/head'
 import Top from '../components/Top'
 import Main from '../components/Main'
-import { ThemeContext, ThemeTypes, themes, getInitialTheme } from "../components/context/theme";
+import { ThemeContext, ThemeTypes, themes, getInitialTheme } from "../components/context/theme"
+import { getCookie, setCookie, CookieValueTypes } from 'cookies-next'
 
-const Home: NextPage = () => {
-  const [theme, setTheme] = useState<ThemeTypes>(themes.light)
+export const getServerSideProps = ({req, res}: {req: NextApiRequest, res: NextApiResponse}) => {
+  const themeMode: CookieValueTypes = getCookie('theme_mode', {req, res}) ?? 'light'
+  return { props: { themeMode } }
+};
+
+const Home = ({ themeMode } : { themeMode: CookieValueTypes }) => {
+  const [theme, setTheme] = useState<ThemeTypes>(themes[themeMode as keyof typeof themes])
   
   const toggleTheme = () => {
     setTheme( (prev) => {
-      localStorage.setItem('theme_mode', prev === themes.dark ? 'light' : 'dark');
+      setCookie('theme_mode', prev === themes.dark ? 'light' : 'dark');
       return prev === themes.dark ? themes.light : themes.dark
     })
   }
 
   useEffect(() => {
-    const themeMode = localStorage.getItem('theme_mode')
+    const themeMode: CookieValueTypes = getCookie('theme_mode')
     const theme = themes[themeMode as keyof typeof themes]
     setTheme(theme ? theme : getInitialTheme())
   }, [])
