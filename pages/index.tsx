@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
-import type { NextApiRequest, NextApiResponse } from 'next';
-import Head from 'next/head'
-import Top from '../components/Top'
-import Main from '../components/Main'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { ThemeContext, ThemeTypes, themes, getInitialTheme } from "../components/context/theme"
 import { getCookie, setCookie, CookieValueTypes } from 'cookies-next'
+import Head from 'next/head'
+import Body from '../components/Body'
 
 export const getServerSideProps = ({req, res}: {req: NextApiRequest, res: NextApiResponse}) => {
   const themeMode: CookieValueTypes = getCookie('theme_mode', {req, res}) ?? 'light'
@@ -44,11 +43,7 @@ const Home = ({ themeMode } : { themeMode: CookieValueTypes }) => {
           }
         `}</style>
 
-        <Top />
-
-        <Main />
-
-        <footer></footer>
+        <Body />
       </ThemeContext.Provider>
     </>
   )

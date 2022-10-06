@@ -6,22 +6,24 @@ const Main: FunctionComponent = () => {
         <>
             <style jsx>{`
                 main {
+                    flex: 1;
                     padding: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                 }
-                h1,h4 {
+                h1, h4 {
                     text-align: center;
                 }
+                h1 {
+                    font-size: 68px;
+                }
             `}</style>
-            <Container 
-                tagName="main"
-                width="600px" 
-                padding="40px"
-                id="headline" 
-                gap="16px"
-            >
-                <h1>Designed With next.JS</h1>
+
+            <main>
+                <h1>Designed With Next.JS</h1>
                 <h4>Gets your system default and saves your theme choice in the cookie storage</h4>
-            </Container>
+            </main>
         </>
     )
 }
