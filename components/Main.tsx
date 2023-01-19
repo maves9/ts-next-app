@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import Container from "./layout/Container";
 
 const Main: FunctionComponent = () => {
     return (

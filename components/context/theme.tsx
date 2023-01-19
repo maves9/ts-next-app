@@ -13,6 +13,8 @@ export const themes = {
     }
 }
 
+export type ThemeModeTypes = 'dark' | 'light'
+
 export interface ThemeTypes {
     foreground: string
     background: string
@@ -24,9 +26,9 @@ export interface iContext {
     toggleTheme: Function
 }
 
-export const getInitialTheme = (): ThemeTypes => {
+export const getInitialTheme = (): ThemeModeTypes => {
     const { matches } = window.matchMedia(('(prefers-color-scheme: dark)'))
-    return matches ? themes.dark : themes.light 
+    return matches ? 'dark' : 'light' 
 }
 
 export const ThemeContext = createContext<iContext>({

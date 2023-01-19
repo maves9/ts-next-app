@@ -1,29 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { ThemeContext, ThemeTypes, themes, getInitialTheme } from "../components/context/theme"
-import { getCookie, setCookie, CookieValueTypes } from 'cookies-next'
+import { ThemeContext, ThemeTypes, ThemeModeTypes, themes, getInitialTheme } from "../components/context/theme"
+import { getCookie, setCookie } from 'cookies-next'
 import Head from 'next/head'
 import Body from '../components/Body'
 
 export const getServerSideProps = ({req, res}: {req: NextApiRequest, res: NextApiResponse}) => {
-  const themeMode: CookieValueTypes = getCookie('theme_mode', {req, res}) ?? 'light'
-  return { props: { themeMode } }
+  const themeModeDefault = getCookie('theme_mode', {req, res}) === 'dark' ? 'dark' : 'light'
+
+  return { props: { themeModeDefault } }
 };
 
-const Home = ({ themeMode } : { themeMode: CookieValueTypes }) => {
-  const [theme, setTheme] = useState<ThemeTypes>(themes[themeMode as keyof typeof themes])
-  
-  const toggleTheme = () => {
-    setTheme( (prev) => {
-      setCookie('theme_mode', prev === themes.dark ? 'light' : 'dark');
-      return prev === themes.dark ? themes.light : themes.dark
+const Home = ({ themeModeDefault } : { themeModeDefault: ThemeModeTypes }) => {
+  const [themeMode, setThemeMode] = useState<ThemeModeTypes>(themeModeDefault)
+  const theme: ThemeTypes = themes[themeMode]
+
+  // Remember state for page load
+  setCookie('theme_mode', themeMode)
+
+  const toggleTheme = (themeMode: ThemeModeTypes) => {
+    setThemeMode( (prev: ThemeModeTypes) => {
+      if (themeMode) {
+        return themeMode
+      }
+      
+      return prev === 'dark' ? 'light' : 'dark'
     })
   }
 
   useEffect(() => {
-    const themeMode: CookieValueTypes = getCookie('theme_mode')
-    const theme = themes[themeMode as keyof typeof themes]
-    setTheme(theme ? theme : getInitialTheme())
+    if (!themeMode) {
+      toggleTheme( getInitialTheme() )
+    }
   }, [])
 
   return (
